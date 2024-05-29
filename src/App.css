@@ -1,38 +1,110 @@
+/* App.css */
+
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  height: 100vh;
 }
 
-.App-link {
-  color: #61dafb;
+.loading {
+  width: 80px; /* Ancho del loader */
+  height: 80px; /* Altura del loader */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+/* Estilos adicionales para hacer el loader responsive */
+@media (max-width: 768px) {
+  .loading {
+    width: 60px; /* Ancho del loader para pantallas medianas */
+    height: 60px; /* Altura del loader para pantallas medianas */
   }
 }
+
+@media (max-width: 576px) {
+  .loading {
+    width: 40px; /* Ancho del loader para pantallas pequeñas */
+    height: 40px; /* Altura del loader para pantallas pequeñas */
+  }
+}
+
+.App {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url('../src/img/paisaje background.png');
+  background-size: cover;
+  background-position: center;
+}
+
+.loading {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.loader-text {
+  position: absolute;
+  top: 1%; /* Centramos verticalmente el texto */
+  transform: translateY(-100%); /* Centramos verticalmente el texto */
+  font-size: 30px;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+h2 {
+  position: absolute;
+  top: 1%; /* Centramos verticalmente el texto */
+  transform: translateY(300%); /* Centramos verticalmente el texto */
+  font-size: 30px;
+  color: #101011;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  
+}
+
+/* Estilos para el formulario */
+form {
+  background-color: #163046; /* Color de fondo del formulario */
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px; /* Ancho del formulario */
+}
+
+form label {
+  display: block;
+  margin-bottom: 10px;
+  color: #fff; /* Color del texto del formulario */
+}
+
+form input[type="text"],
+form input[type="password"] {
+  width: calc(100% - 20px); /* Ancho del input */
+  padding: 8px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 4px;
+}
+
+form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #0d47a1; /* Color del botón */
+  border: none;
+  border-radius: 4px;
+  color: #fff; /* Color del texto del botón */
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #1565c0; /* Color del botón al pasar el mouse */
+}
+

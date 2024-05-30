@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import './Formulario.css';
 
-
 const Formulario = () => {
   const [fields, setFields] = useState({
-    field1: '',
-    field2: '',
-    field3: '',
-    field4: ''
+    date: '',
+    peso: '',
+    presion: '',
+    pulso: '',
+    sueno: '',
+    tos: '',
+    deposicion: '',
+    orina: ''
   });
-  const [imageCount, setImageCount] = useState(0);
-  const [imageFiles, setImageFiles] = useState([]);
-  const maxImages = 5;
+  const [imageFiles, setImageFiles] = useState({
+    peso: null,
+    presion: null,
+    pulso: null
+  });
 
   const handleChange = (e) => {
     setFields({
@@ -21,37 +26,51 @@ const Formulario = () => {
   };
 
   const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
-    if (files.length > maxImages) {
-      alert(`Solo puedes subir hasta ${maxImages} imágenes`);
-      return;
+    const { name } = e.target;
+    const file = e.target.files[0];
+    setImageFiles({
+      ...imageFiles,
+      [name]: file
+    });
+  };
+
+  const validateFields = () => {
+    let valid = true;
+    let errors = {};
+
+    // Validación de fecha
+    const currentDate = new Date();
+    const selectedDate = new Date(fields.date);
+    if (!fields.date || isNaN(selectedDate) || selectedDate > currentDate) {
+      valid = false;
+      errors.date = 'Fecha inválida o en el futuro';
     }
-    setImageFiles(files);
-    setImageCount(files.length);
+
+    // Validación de campos numéricos
+    ['presion', 'pulso'].forEach((field) => {
+      if (isNaN(fields[field])) {
+        valid = false;
+        errors[field] = 'Debe ser un número válido';
+      }
+    });
+
+    // Validación de selects
+    ['sueno', 'tos', 'deposicion', 'orina'].forEach((field) => {
+      if (!fields[field]) {
+        valid = false;
+        errors[field] = 'Este campo es requerido';
+      }
+    });
+
+    return { valid, errors };
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let valid = true;
-    let errors = {};
-
-    // Validación de campos requeridos
-    Object.entries(fields).forEach(([key, value]) => {
-      if (!value.trim()) {
-        valid = false;
-        errors[key] = 'Este campo es requerido';
-      }
-    });
-
-    // Validación de imágenes
-    if (imageCount === 0) {
-      valid = false;
-      errors.photos = 'Debe subir al menos una imagen';
-    }
+    const { valid, errors } = validateFields();
 
     if (valid) {
       // Procesar el envío del formulario
-      // Aquí puedes enviar los datos al servidor o hacer cualquier otro proceso necesario
       alert('Formulario enviado');
     } else {
       // Mostrar errores
@@ -59,31 +78,81 @@ const Formulario = () => {
     }
   };
 
-  const renderPreview = () => {
-    return imageFiles.map((file, index) => (
-      <div key={index} style={{ display: 'inline-block', position: 'relative', margin: '5px' }}>
-        <img src={URL.createObjectURL(file)} alt={`preview-${index}`} style={{ width: '100px', height: '100px' }} />
+  const renderFileName = (file) => {
+    if (!file) return null;
+    return (
+      <div className="file-name">
+        {file.name}
       </div>
-    ));
+    );
   };
 
   return (
     <div className="form-container">
       <form className="formulario" id="imageForm" onSubmit={handleSubmit} encType="multipart/form-data">
-        <label htmlFor="field1">Campo 1:</label>
-        <input type="text" id="field1" name="field1" value={fields.field1} onChange={handleChange} required /><br /><br />
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="date">Fecha:</label>
+            <input type="date" id="date" name="date" value={fields.date} onChange={handleChange} required />
+          </div>
+          <div className="form-group">
+            <label htmlFor="peso">Peso:</label>
+            <input type="file" id="peso" name="peso" accept="image/*" capture="environment" onChange={handleImageChange} required />
+            {renderFileName(imageFiles.peso)}
+          </div>
+        </div>
 
-        <label htmlFor="field2">Campo 2:</label>
-        <input type="text" id="field2" name="field2" value={fields.field2} onChange={handleChange} required /><br /><br />
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="presion">Presión:</label>
+            <input type="file" id="presion" name="presion" accept="image/*" capture="environment" onChange={handleImageChange} required />
+            {renderFileName(imageFiles.presion)}
+          </div>
+          <div className="form-group">
+            <label htmlFor="pulso">Pulso:</label>
+            <input type="file" id="pulso" name="pulso" accept="image/*" capture="environment" onChange={handleImageChange} required />
+            {renderFileName(imageFiles.pulso)}
+          </div>
+        </div>
 
-        <label htmlFor="field3">Campo 3:</label>
-        <input type="text" id="field3" name="field3" value={fields.field3} onChange={handleChange} required /><br /><br />
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="sueno">Sueño - Hs:</label>
+            <select id="sueno" name="sueno" value={fields.sueno} onChange={handleChange} required>
+              <option value="">Seleccione...</option>
+              {Array.from({ length: 12 }, (_, i) => i + 1).map(num => (
+                <option key={num} value={num}>{num}</option>
+              ))}
+            </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="tos">Tos:</label>
+            <select id="tos" name="tos" value={fields.tos} onChange={handleChange} required>
+              <option value="">Seleccione...</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+          </div>
+        </div>
 
-        <label htmlFor="field4">Campo 4:</label>
-        <input type="text" id="field4" name="field4" value={fields.field4} onChange={handleChange} required /><br /><br />
-
-        <input type="file" name="photos" id="photos" onChange={handleImageChange} multiple />
-        <div id="previewContainer">{renderPreview()}</div> <br />
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="deposicion">Deposición:</label>
+            <select id="deposicion" name="deposicion" value={fields.deposicion} onChange={handleChange} required>
+              <option value="">Seleccione...</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="orina">Orina Normal:</label>
+            <select id="orina" name="orina" value={fields.orina} onChange={handleChange} required>
+              <option value="">Seleccione...</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+          </div>
+        </div>
 
         <button type="submit">Enviar</button>
       </form>

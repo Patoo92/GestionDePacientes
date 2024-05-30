@@ -50,8 +50,8 @@ const App = () => {
               <div>
                 <Menu onLogout={handleLogout} />
                 <Routes>
-                  <Route path="/menu" element={<Navigate to="/menu" />} />
                   <Route path="/formulario" element={<Formulario />} />
+                  <Route path="*" element={<Navigate to="/menu" />} />
                 </Routes>
               </div>
             )}

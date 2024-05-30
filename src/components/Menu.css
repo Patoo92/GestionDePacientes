@@ -1,0 +1,84 @@
+/* Basic Styles for Navbar */
+.navbar {
+  width: 100%;
+  background-color: #333;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-links li {
+  display: inline-block;
+}
+
+.nav-links a {
+  color: white;  /* Cambié el color del texto a blanco para visibilidad */
+  font-weight: 700;
+  text-decoration: none;
+  padding: 15px 20px;
+  display: block;
+}
+
+.logout-button {
+  background-color: red;
+  color: white;
+  padding: 15px 20px;
+  display: block;
+  text-align: center;
+}
+
+/* Hamburger Menu Styles */
+.hamburger-menu {
+  display: none;
+}
+
+/* Hide the checkbox */
+#menu-toggle {
+  display: none;
+}
+
+.menu-icon {
+  display: none;
+  font-size: 30px;
+  color: white;  /* Cambié el color del ícono a blanco para visibilidad */
+  padding: 15px 20px;
+  cursor: pointer;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .nav-links {
+    flex-direction: column;
+    background-color: #333;  /* Ajusté el color de fondo */
+    width: 100%;
+    display: none;
+  }
+
+  .nav-links li {
+    text-align: center;
+    width: 100%;
+  }
+
+  .hamburger-menu {
+    display: block;
+  }
+
+  #menu-toggle:checked + .menu-icon + .nav-links {
+    display: flex;
+  }
+
+  .menu-icon {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;  /* Ajusté la posición del ícono de menú */
+  }
+}

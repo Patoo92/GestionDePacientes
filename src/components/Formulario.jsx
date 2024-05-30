@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Formulario.css';
 
+
 const Formulario = () => {
   const [fields, setFields] = useState({
     field1: '',
@@ -32,22 +33,29 @@ const Formulario = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     let valid = true;
-    Object.values(fields).forEach((value) => {
+    let errors = {};
+
+    // Validación de campos requeridos
+    Object.entries(fields).forEach(([key, value]) => {
       if (!value.trim()) {
         valid = false;
-      } else if (!/^[a-zA-Z0-9\s]+$/.test(value)) {
-        valid = false;
+        errors[key] = 'Este campo es requerido';
       }
     });
 
+    // Validación de imágenes
     if (imageCount === 0) {
-      alert("Debe subir al menos una imagen");
       valid = false;
+      errors.photos = 'Debe subir al menos una imagen';
     }
 
     if (valid) {
       // Procesar el envío del formulario
+      // Aquí puedes enviar los datos al servidor o hacer cualquier otro proceso necesario
       alert('Formulario enviado');
+    } else {
+      // Mostrar errores
+      console.log('Errores:', errors);
     }
   };
 
@@ -75,7 +83,7 @@ const Formulario = () => {
         <input type="text" id="field4" name="field4" value={fields.field4} onChange={handleChange} required /><br /><br />
 
         <input type="file" name="photos" id="photos" onChange={handleImageChange} multiple />
-        <div id="previewContainer">{renderPreview()}</div> 
+        <div id="previewContainer">{renderPreview()}</div> <br />
 
         <button type="submit">Enviar</button>
       </form>

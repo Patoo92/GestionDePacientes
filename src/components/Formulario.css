@@ -3,7 +3,7 @@
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
- /*  background-color: #f4f4f4; */
+  /* background-color: #f4f4f4; */
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -17,19 +17,19 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 10px; /* Ajuste para separación entre filas */
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  flex: 1;
-  min-width: 40%; /* To make sure two items fit in a row on larger screens */
-  margin-right: 10px;
+  flex-basis: calc(50% - 10px); /* Dos elementos por fila con espacio entre ellos */
+  flex-grow: 1;
+  margin-bottom: 10px;
 }
 
-.form-group:last-child {
-  margin-right: 0;
+.form-group:first-child {
+  margin-right: 10px;
 }
 
 label {
@@ -40,11 +40,11 @@ label {
 input[type="date"],
 input[type="file"],
 select {
-  padding: 10px;
-  border: 1px solid #fff(0, 0%, 100%);
-  border-radius: 4px;
-  background-color: #fff;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
   font-size: 14px;
+  width: 100%; /* Asegura que los inputs ocupen el ancho completo del contenedor */
 }
 
 button {

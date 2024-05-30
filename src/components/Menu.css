@@ -2,7 +2,8 @@
 .navbar {
   width: 100%;
   background-color: #333;
-  position: fixed;
+  position:fixed;
+  left: -10px;
   top: 0;
   z-index: 1000;
 }
@@ -10,7 +11,7 @@
 .nav-links {
   list-style: none;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
   padding: 0;
   margin: 0;
 }
@@ -48,7 +49,7 @@
 .menu-icon {
   display: none;
   font-size: 30px;
-  color: white;  /* Cambié el color del ícono a blanco para visibilidad */
+  color: rgb(7, 7, 7);  /* Cambié el color del ícono a blanco para visibilidad */
   padding: 15px 20px;
   cursor: pointer;
 }
@@ -67,10 +68,6 @@
     width: 100%;
   }
 
-  .hamburger-menu {
-    display: block;
-  }
-
   #menu-toggle:checked + .menu-icon + .nav-links {
     display: flex;
   }
@@ -79,6 +76,6 @@
     display: block;
     position: absolute;
     top: 0;
-    right: 0;  /* Ajusté la posición del ícono de menú */
+    left: 1px;  /* Ajusté la posición del ícono de menú */
   }
 }

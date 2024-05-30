@@ -152,7 +152,7 @@ const Formulario = () => {
               <option value="2">2</option>
             </select>
           </div>
-        </div>
+        </div> <br />
 
         <button type="submit">Enviar</button>
       </form>

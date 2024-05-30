@@ -58,19 +58,6 @@
   color: #fff;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
-
-h2 {
-  position: absolute;
-  top: 1%; /* Centramos verticalmente el texto */
-  transform: translateY(300%); /* Centramos verticalmente el texto */
-  font-size: 30px;
-  color: #101011;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  
-}
-
 /* Estilos para el formulario */
 form {
   background-color: #163046; /* Color de fondo del formulario */
@@ -107,4 +94,3 @@ form button {
 form button:hover {
   background-color: #1565c0; /* Color del botón al pasar el mouse */
 }
-

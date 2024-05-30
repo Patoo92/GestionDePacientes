@@ -1,3 +1,4 @@
+// App.js
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Menu from './components/Menu';
@@ -9,24 +10,31 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  useEffect(() => {
+    // Al cargar la aplicación, verifica si hay información de sesión almacenada
+    const storedLoggedIn = localStorage.getItem('isLoggedIn');
+    if (storedLoggedIn === 'true') {
+      setIsLoggedIn(true);
+    }
+    setLoading(false);
+  }, []);
+
   const handleLogin = (event) => {
     event.preventDefault();
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
       setIsLoggedIn(true);
+      // Almacenar información de sesión cuando se inicia sesión exitosamente
+      localStorage.setItem('isLoggedIn', 'true');
     }, 3000);
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
+    // Borrar la información de sesión al cerrar sesión
+    localStorage.removeItem('isLoggedIn');
   };
-
-  useEffect(() => {
-    window.addEventListener('load', () => {
-      setLoading(false);
-    });
-  }, []);
 
   return (
     <Router>
@@ -51,7 +59,7 @@ const App = () => {
                 <Menu onLogout={handleLogout} />
                 <Routes>
                   <Route path="/formulario" element={<Formulario />} />
-                  <Route path="*" element={<Navigate to="/menu" />} />
+                  <Route path="*" element={<Navigate to="/formulario" />} />
                 </Routes>
               </div>
             )}

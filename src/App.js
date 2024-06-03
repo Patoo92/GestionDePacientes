@@ -1,20 +1,25 @@
-// App.js
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Menu from './components/Menu';
 import Formulario from './components/Formulario';
+import AdminInterface from './components/AdminInterface';
 import { RotateLoader } from 'react-spinners';
 import './App.css';
+import './components/AdminNavbar.css'; // Importar estilos de la barra de navegación
 
 const App = () => {
   const [loading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState(null);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   useEffect(() => {
-    // Al cargar la aplicación, verifica si hay información de sesión almacenada
     const storedLoggedIn = localStorage.getItem('isLoggedIn');
-    if (storedLoggedIn === 'true') {
+    const storedUserRole = localStorage.getItem('userRole');
+    if (storedLoggedIn === 'true' && storedUserRole) {
       setIsLoggedIn(true);
+      setUserRole(storedUserRole);
     }
     setLoading(false);
   }, []);
@@ -25,15 +30,26 @@ const App = () => {
     setTimeout(() => {
       setLoading(false);
       setIsLoggedIn(true);
-      // Almacenar información de sesión cuando se inicia sesión exitosamente
+      const role = determineUserRole(username, password);
+      setUserRole(role);
       localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('userRole', role);
     }, 3000);
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    // Borrar la información de sesión al cerrar sesión
+    setUserRole(null);
     localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userRole');
+  };
+
+  const determineUserRole = (username, password) => {
+    if (username === 'admin' && password === 'Adm1n$3cur3P@ssw0rd') {
+      return 'admin';
+    } else {
+      return 'user';
+    }
   };
 
   return (
@@ -49,17 +65,35 @@ const App = () => {
             {!isLoggedIn ? (
               <form onSubmit={handleLogin}>
                 <label htmlFor="username">Usuario:</label>
-                <input type="text" id="username" name="username" required />
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                />
                 <label htmlFor="password">Contraseña:</label>
-                <input type="password" id="password" name="password" required />
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
                 <button type="submit">Iniciar sesión</button>
               </form>
             ) : (
               <div>
-                <Menu onLogout={handleLogout} />
+                <Menu onLogout={handleLogout} userRole={userRole} />
                 <Routes>
-                  <Route path="/formulario" element={<Formulario />} />
-                  <Route path="*" element={<Navigate to="/formulario" />} />
+                  {userRole === 'admin' ? (
+                    <Route path="/admin" element={<AdminInterface onLogout={handleLogout} />} />
+                  ) : (
+                    <Route path="/formulario" element={<Formulario />} />
+                  )}
+                  <Route path="*" element={<Navigate to={userRole === 'admin' ? "/admin" : "/formulario"} />} />
                 </Routes>
               </div>
             )}

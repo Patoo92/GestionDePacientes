@@ -1,0 +1,44 @@
+.navbar {
+    background-color: #444;
+    overflow: hidden;
+  }
+  
+  .navbar .nav-links {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .navbar .nav-links li {
+    padding: 14px 20px;
+  }
+  
+  .navbar .nav-links li a,
+  .navbar .nav-links li .logout-button {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .navbar #menu-toggle {
+    display: none;
+  }
+  
+  .navbar .menu-icon {
+    display: none;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .navbar .menu-icon {
+      display: block;
+    }
+  
+    .navbar .nav-links {
+      display: none;
+      flex-direction: column;
+    }
+  
+    .navbar #menu-toggle:checked + .menu-icon + .nav-links {
+      display: flex;
+    }
+  }
+  

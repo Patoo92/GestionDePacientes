@@ -9,7 +9,7 @@ const Menu = ({ onLogout }) => {
 
   return (
     <nav className="navbar">
-      <input type="checkbox" id="menu-toggle"/>
+      <input type="checkbox" id="menu-toggle" />
       <label htmlFor="menu-toggle" className="menu-icon">&#9776;</label>
       <ul className="nav-links">
         <li><Link to="/medicacion">Medicación</Link></li>

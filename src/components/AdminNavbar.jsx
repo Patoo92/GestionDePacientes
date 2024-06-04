@@ -8,6 +8,8 @@ const AdminNavbar = ({ onLogout }) => {
       <input type="checkbox" id="nav-toggle" className="nav-toggle" />
       <label htmlFor="nav-toggle" className="nav-toggle-label">
         <span></span>
+        <span></span>
+        <span></span>
       </label>
       <ul className="nav-menu">
         <li><Link to="/buscar-paciente">Buscar Paciente</Link></li>

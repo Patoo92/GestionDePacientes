@@ -86,7 +86,7 @@ const App = () => {
               </form>
             ) : (
               <div>
-                <Menu onLogout={handleLogout} userRole={userRole} />
+                {userRole === 'user' && <Menu onLogout={handleLogout} userRole={userRole} />}
                 <Routes>
                   {userRole === 'admin' ? (
                     <Route path="/admin" element={<AdminInterface onLogout={handleLogout} />} />

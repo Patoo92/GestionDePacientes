@@ -1,44 +1,68 @@
 .navbar {
-    background-color: #444;
-    overflow: hidden;
+  background-color: #333;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 20px;
+}
+
+.nav-links {
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  align-items: center; /* Para alinear verticalmente */
+}
+
+.nav-links li {
+  padding: 14px 20px;
+}
+
+.nav-links li a,
+.nav-links li button {
+  color: white;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.nav-links li button {
+  background-color: red; /* Fondo rojo para el botón */
+  border-radius: 5px; /* Bordes redondeados */
+  padding: 10px 20px; /* Espaciado interno */
+}
+
+.nav-links li button:hover {
+  background-color: darkred; /* Fondo más oscuro al pasar el mouse */
+}
+
+#menu-toggle {
+  display: none;
+}
+
+.menu-icon {
+  display: none;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+  .menu-icon {
+    display: block;
   }
-  
-  .navbar .nav-links {
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background-color: #333;
+  }
+
+  #menu-toggle:checked + .menu-icon + .nav-links {
     display: flex;
-    list-style-type: none;
-    padding: 0;
   }
-  
-  .navbar .nav-links li {
-    padding: 14px 20px;
+
+  .nav-links li {
+    padding: 10px;
   }
-  
-  .navbar .nav-links li a,
-  .navbar .nav-links li .logout-button {
-    color: white;
-    text-decoration: none;
-  }
-  
-  .navbar #menu-toggle {
-    display: none;
-  }
-  
-  .navbar .menu-icon {
-    display: none;
-  }
-  
-  @media screen and (max-width: 768px) {
-    .navbar .menu-icon {
-      display: block;
-    }
-  
-    .navbar .nav-links {
-      display: none;
-      flex-direction: column;
-    }
-  
-    .navbar #menu-toggle:checked + .menu-icon + .nav-links {
-      display: flex;
-    }
-  }
-  
+}

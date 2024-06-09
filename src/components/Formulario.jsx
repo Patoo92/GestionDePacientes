@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import { collection, addDoc } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { getAuth } from 'firebase/auth';
 import './Formulario.css';
 
-const Formulario = () => {
+const Formulario = ({ db }) => {
   const [fields, setFields] = useState({
     date: '',
     peso: '',
@@ -17,6 +20,7 @@ const Formulario = () => {
     presion: null,
     pulso: null
   });
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     setFields({
@@ -36,45 +40,71 @@ const Formulario = () => {
 
   const validateFields = () => {
     let valid = true;
-    let errors = {};
+    let newErrors = {};
 
-    // Validación de fecha
     const currentDate = new Date();
     const selectedDate = new Date(fields.date);
     if (!fields.date || isNaN(selectedDate) || selectedDate > currentDate) {
       valid = false;
-      errors.date = 'Fecha inválida o en el futuro';
+      newErrors.date = 'Fecha inválida o en el futuro';
     }
 
-    // Validación de campos numéricos
     ['presion', 'pulso'].forEach((field) => {
       if (isNaN(fields[field])) {
         valid = false;
-        errors[field] = 'Debe ser un número válido';
+        newErrors[field] = 'Debe ser un número válido';
       }
     });
 
-    // Validación de selects
     ['sueno', 'tos', 'deposicion', 'orina'].forEach((field) => {
       if (!fields[field]) {
         valid = false;
-        errors[field] = 'Este campo es requerido';
+        newErrors[field] = 'Este campo es requerido';
       }
     });
 
-    return { valid, errors };
+    setErrors(newErrors);
+    return valid;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const { valid, errors } = validateFields();
+    if (!validateFields()) {
+      return;
+    }
 
-    if (valid) {
-      // Procesar el envío del formulario
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (!user) {
+      alert('Por favor, inicie sesión para enviar el formulario.');
+      return;
+    }
+
+    const storage = getStorage();
+    const imageUrls = {};
+
+    try {
+      for (const [key, file] of Object.entries(imageFiles)) {
+        if (file) {
+          const storageRef = ref(storage, `images/${key}-${Date.now()}-${file.name}`);
+          await uploadBytes(storageRef, file);
+          const url = await getDownloadURL(storageRef);
+          imageUrls[key] = url;
+        }
+      }
+
+      const formData = {
+        ...fields,
+        imageUrls,
+        userId: user.uid // Añadimos el ID del usuario
+      };
+
+      await addDoc(collection(db, 'formularios'), formData);
       alert('Formulario enviado');
-    } else {
-      // Mostrar errores
-      console.log('Errores:', errors);
+    } catch (error) {
+      console.error('Error al guardar el formulario:', error);
+      alert('Error al guardar el formulario: ' + error.message);
     }
   };
 
@@ -94,6 +124,7 @@ const Formulario = () => {
           <div className="form-group">
             <label htmlFor="date">Fecha:</label>
             <input type="date" id="date" name="date" value={fields.date} onChange={handleChange} required />
+            {errors.date && <p className="error">{errors.date}</p>}
           </div>
           <div className="form-group">
             <label htmlFor="peso">Peso:</label>

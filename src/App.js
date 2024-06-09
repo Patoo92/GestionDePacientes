@@ -3,53 +3,82 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Menu from './components/Menu';
 import Formulario from './components/Formulario';
 import AdminInterface from './components/AdminInterface';
-import { RotateLoader } from 'react-spinners';
+import Registro from './components/Registro.jsx';
+import { BarLoader } from 'react-spinners';
 import './App.css';
-import './components/AdminNavbar.css'; // Importar estilos de la barra de navegación
+import './components/AdminNavbar.css';
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from 'firebase/auth';
+import { FcGoogle } from 'react-icons/fc'; 
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD9txq-149vA1qSWGEgsGP8zhKNtaCKjpY",
+  authDomain: "gestion-de-pacientes-3edf2.firebaseapp.com",
+  projectId: "gestion-de-pacientes-3edf2",
+  storageBucket: "gestion-de-pacientes-3edf2.appspot.com",
+  messagingSenderId: "617318453202",
+  appId: "1:617318453202:web:74690a4d3017b397b3020b"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth();
 
 const App = () => {
   const [loading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userRole, setUserRole] = useState(null);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [userRole, setUserRole] = useState('');
+  const [showLogin, setShowLogin] = useState(true);
+  const [userName, setUserName] = useState('');
 
   useEffect(() => {
-    const storedLoggedIn = localStorage.getItem('isLoggedIn');
-    const storedUserRole = localStorage.getItem('userRole');
-    if (storedLoggedIn === 'true' && storedUserRole) {
-      setIsLoggedIn(true);
-      setUserRole(storedUserRole);
-    }
-    setLoading(false);
-  }, []);
-
-  const handleLogin = (event) => {
-    event.preventDefault();
-    setLoading(true);
     setTimeout(() => {
       setLoading(false);
+    }, 2000);
+
+    getRedirectResult(auth)
+      .then((result) => {
+        if (result) {
+          const user = result.user;
+          setIsLoggedIn(true);
+          setUserRole('user');
+          setUserName(user.displayName);
+        }
+      })
+      .catch((error) => {
+        console.error('Error en el redireccionamiento de inicio de sesión con Google:', error);
+      });
+  }, []);
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const username = e.target.username.value;
+    const password = e.target.password.value;
+
+    if (username === 'admin' && password === 'adminpassword') {
       setIsLoggedIn(true);
-      const role = determineUserRole(username, password);
-      setUserRole(role);
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('userRole', role);
-    }, 3000);
+      setUserRole('admin');
+      setUserName('Admin');
+    } else if (username === 'user' && password === 'userpassword') {
+      setIsLoggedIn(true);
+      setUserRole('user');
+      setUserName(username);
+    } else {
+      alert('Credenciales incorrectas');
+    }
+  };
+
+  const handleGoogleSignIn = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithRedirect(auth, provider);
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    setUserRole(null);
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('userRole');
-  };
-
-  const determineUserRole = (username, password) => {
-    if (username === 'admin' && password === 'Adm1n$3cur3P@ssw0rd') {
-      return 'admin';
-    } else {
-      return 'user';
-    }
+    setUserRole('');
+    setUserName('');
   };
 
   return (
@@ -57,41 +86,47 @@ const App = () => {
       <div className="App">
         {loading ? (
           <div className="loading">
-            <RotateLoader color={'#123abc'} loading={loading} size={15} />
-            <div className="loader-text">TeleMedicina</div>
+            <BarLoader color={'#1AD86A'} loading={loading} size={100} />
+            <div className="loader-text">MedicOn</div>
           </div>
         ) : (
           <div>
             {!isLoggedIn ? (
-              <form onSubmit={handleLogin}>
-                <label htmlFor="username">Usuario:</label>
-                <input
-                  type="text"
-                  id="username"
-                  name="username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                />
-                <label htmlFor="password">Contraseña:</label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-                <button type="submit">Iniciar sesión</button>
-              </form>
+              <div>
+                {showLogin ? (
+                  <div>
+                    <form onSubmit={handleLogin} className="login-form">
+                      <h2>Iniciar Sesión</h2>
+                      <label>
+                        Usuario:
+                        <input type="text" name="username" required />
+                      </label>
+                      <label>
+                        Contraseña:
+                        <input type="password" name="password" required />
+                      </label>
+                      <button type="submit">Iniciar Sesión</button>
+                    </form>
+                    <button onClick={handleGoogleSignIn} className="google-signin-button">
+                      <FcGoogle size={24} /> Iniciar Sesión con Google
+                    </button>
+                    <button onClick={() => setShowLogin(false)}>¿No tienes cuenta? Regístrate</button>
+                  </div>
+                ) : (
+                  <div>
+                    <Registro />
+                    <button onClick={() => setShowLogin(true)}>¿Tienes cuenta? Ingresa</button>
+                  </div>
+                )}
+              </div>
             ) : (
               <div>
-                {userRole === 'user' && <Menu onLogout={handleLogout} userRole={userRole} />}
+                <Menu onLogout={handleLogout} userRole={userRole} userName={userName} />
                 <Routes>
                   {userRole === 'admin' ? (
                     <Route path="/admin" element={<AdminInterface onLogout={handleLogout} />} />
                   ) : (
-                    <Route path="/formulario" element={<Formulario />} />
+                    <Route path="/formulario" element={<Formulario db={db} />} />
                   )}
                   <Route path="*" element={<Navigate to={userRole === 'admin' ? "/admin" : "/formulario"} />} />
                 </Routes>

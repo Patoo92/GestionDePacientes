@@ -16,6 +16,7 @@ const Menu = ({ onLogout, userName }) => {
         <li><span className="navbar-user">@{userName}</span></li>
         <li><Link to="/medicacion">Medicación</Link></li>
         <li><Link to="/agenda">Agenda</Link></li>
+        <li><Link to="/formulario">Formulario</Link></li> {/* Añadido enlace al formulario */}
         <li><a href="#" onClick={handleLogout} className="logout-button">Cerrar</a></li>
       </ul>
     </nav>

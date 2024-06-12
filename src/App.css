@@ -1,11 +1,13 @@
-/* App.css */
-
 /* General styles */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  background-image: url('./img/fondos-pantalla-iphone-que-estan-fuera-mundo_901275-18104.avif');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 
 /* Center content horizontally and vertically */
@@ -14,7 +16,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f0f0f0;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 /* Loader styles */
@@ -25,17 +27,17 @@ body {
 .loader-text {
   margin-top: 20px;
   font-size: 1.5em;
-  color: #123abc;
+  color: #ffffff;
 }
 
 /* Login form styles */
 .login-form {
-  width: 90%;
+  width: 100%;
   max-width: 400px;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.2);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -43,14 +45,14 @@ body {
   text-align: center;
   margin-bottom: 20px;
   font-size: 1.5em;
-  color: #333;
+  color: #ffffff;
 }
 
 .login-form label {
   display: block;
   margin-bottom: 5px;
   font-size: 1em;
-  color: #666;
+  color: #ffffff;
 }
 
 .login-form input {
@@ -78,6 +80,54 @@ body {
   background-color: #45a049;
 }
 
+/* Button container styles */
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.button-container .google-signin-button,
+.button-container .toggle-form-button {
+  width: 90%;
+  max-width: 400px;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.google-signin-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+.google-signin-button:hover {
+  background-color: #357ae8;
+}
+
+.google-signin-button svg {
+  margin-right: 10px;
+}
+
+.toggle-form-button {
+  background-color: transparent;
+  color: #007bff;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.toggle-form-button:hover {
+  color: #0056b3;
+}
+
 /* Responsive design */
 @media (max-width: 600px) {
   .login-form {
@@ -88,8 +138,46 @@ body {
     font-size: 1.2em;
   }
 
-  .login-form input,
-  .login-form button {
+  .login-form label {
     font-size: 0.9em;
   }
+
+  .login-form input,
+  .login-form button,
+  .button-container .google-signin-button,
+  .button-container .toggle-form-button {
+    font-size: 0.9em;
+  }
+
+  .google-signin-button svg {
+    width: 18px;
+    height: 18px;
+  }
 }
+
+@media (max-width: 400px) {
+  .login-form {
+    padding: 10px;
+  }
+
+  .login-form h2 {
+    font-size: 1em;
+  }
+
+  .login-form label {
+    font-size: 0.8em;
+  }
+
+  .login-form input,
+  .login-form button,
+  .button-container .google-signin-button,
+  .button-container .toggle-form-button {
+    font-size: 0.8em;
+  }
+
+  .google-signin-button svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+

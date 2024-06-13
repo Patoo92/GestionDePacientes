@@ -1,53 +1,79 @@
 /* Menu.css */
 
+/* Ocultar la barra de navegación original */
 .navbar {
-  position: relative;
-  background-color: #333;
-  padding: 10px;
-  color: white;
+  display: none;
+}
+
+/* Mostrar el checkbox durante las pruebas */
+.menu-toggle {
+  display: block;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  opacity: 0; /* Hacerlo invisible pero funcional */
+  z-index: 1001;
 }
 
 .menu-icon {
-  display: none;
+  font-size: 2em;
   cursor: pointer;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 24px;
+  width: 30px;
 }
 
-.nav-links {
+.menu-icon-line {
+  width: 100%;
+  height: 3px;
+  background-color: rgb(255, 255, 255); /* Cambiar a blanco si el fondo es oscuro */
+}
+
+/* Sidebar Styles */
+.sidebar {
+  height: 100%;
+  width: 250px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.7); /* Sidebar translúcido */
+  backdrop-filter: blur(10px); /* Aplicar efecto de desenfoque */
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 999;
+}
+
+.sidebar ul {
   list-style-type: none;
   padding: 0;
-  margin: 0;
-  display: flex;
-  justify-content: space-around;
 }
 
-.nav-links li {
-  margin: 0 10px;
+.sidebar li {
+  padding: 20px;
+  text-align: center;
 }
 
-.nav-links a, .navbar-user {
+.navbar-user, .logout-button {
   color: white;
-  text-decoration: none;
 }
 
-.logout-button {
-  cursor: pointer;
+/* Mostrar sidebar cuando el checkbox está marcado */
+#menu-toggle:checked ~ .sidebar {
+  transform: translateX(0);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .menu-icon {
-    display: block;
+    left: 10px;
   }
 
-  .nav-links {
-    display: none;
-    flex-direction: column;
-  }
-
-  .nav-links li {
-    margin: 10px 0;
-  }
-
-  #menu-toggle:checked + .menu-icon + .nav-links {
-    display: flex;
+  .sidebar {
+    width: 100%; /* Hacer que el sidebar ocupe todo el ancho en móvil */
   }
 }

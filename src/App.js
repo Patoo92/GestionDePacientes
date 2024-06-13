@@ -219,7 +219,7 @@ const App = () => {
                         className="google-signin-button"
                         onClick={handleGoogleSignIn}
                       >
-                        <FcGoogle size={20} /> Iniciar Sesión con Google
+                        <FcGoogle size={20} /> Continuar con Google
                       </button>
                       <button
                         className="toggle-form-button"

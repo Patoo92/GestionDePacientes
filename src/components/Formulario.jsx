@@ -100,6 +100,8 @@ const Formulario = ({ db }) => {
         userId: user.uid // Añadimos el ID del usuario
       };
 
+      console.log('Datos del formulario a enviar:', formData);
+
       await addDoc(collection(db, 'formularios'), formData);
       alert('Formulario enviado');
     } catch (error) {

@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
+import {BrowserRouter as Router,Route,Routes,Navigate,} from "react-router-dom";
 import Menu from "./components/Menu";
 import Formulario from "./components/Formulario";
 import AdminInterface from "./components/AdminInterface";
@@ -20,7 +15,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyD9txq-149vA1qSWGEgsGP8zhKNtaCKjpY",
   authDomain: "gestion-de-pacientes-3edf2.firebaseapp.com",
   projectId: "gestion-de-pacientes-3edf2",
-  storageBucket: "gestion-de-pacientes-3edf2",
+  storageBucket: "gestion-de-pacientes-3edf2.appspot.com",
   messagingSenderId: "617318453202",
   appId: "1:617318453202:web:74690a4d3017b397b3020b",
 };

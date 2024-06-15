@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { getAuth } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 import './Formulario.css';
 
 const Formulario = ({ db }) => {
@@ -21,6 +22,8 @@ const Formulario = ({ db }) => {
     pulso: null
   });
   const [errors, setErrors] = useState({});
+  const [successMessage, setSuccessMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFields({
@@ -103,7 +106,10 @@ const Formulario = ({ db }) => {
       console.log('Datos del formulario a enviar:', formData);
 
       await addDoc(collection(db, 'formularios'), formData);
-      alert('Formulario enviado');
+      setSuccessMessage('Formulario enviado. Volviendo al menú principal...');
+      setTimeout(() => {
+        navigate('/menu'); // Redirige al menú principal después de 3 segundos
+      }, 3000);
     } catch (error) {
       console.error('Error al guardar el formulario:', error);
       alert('Error al guardar el formulario: ' + error.message);
@@ -121,74 +127,80 @@ const Formulario = ({ db }) => {
 
   return (
     <div className="form-container">
-      <form className="formulario" id="imageForm" onSubmit={handleSubmit} encType="multipart/form-data">
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="date">Fecha:</label>
-            <input type="date" id="date" name="date" value={fields.date} onChange={handleChange} required />
-            {errors.date && <p className="error">{errors.date}</p>}
-          </div>
-          <div className="form-group">
-            <label htmlFor="peso">Peso:</label>
-            <input type="file" id="peso" name="peso" accept="image/*" capture="environment" onChange={handleImageChange} required />
-            {renderFileName(imageFiles.peso)}
-          </div>
+      {successMessage ? (
+        <div className="success-message">
+          {successMessage}
         </div>
+      ) : (
+        <form className="formulario" id="imageForm" onSubmit={handleSubmit} encType="multipart/form-data">
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="date">Fecha:</label>
+              <input type="date" id="date" name="date" value={fields.date} onChange={handleChange} required />
+              {errors.date && <p className="error">{errors.date}</p>}
+            </div>
+            <div className="form-group">
+              <label htmlFor="peso">Peso:</label>
+              <input type="file" id="peso" name="peso" accept="image/*" capture="environment" onChange={handleImageChange} required />
+              {renderFileName(imageFiles.peso)}
+            </div>
+          </div>
 
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="presion">Presión:</label>
-            <input type="file" id="presion" name="presion" accept="image/*" capture="environment" onChange={handleImageChange} required />
-            {renderFileName(imageFiles.presion)}
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="presion">Presión:</label>
+              <input type="file" id="presion" name="presion" accept="image/*" capture="environment" onChange={handleImageChange} required />
+              {renderFileName(imageFiles.presion)}
+            </div>
+            <div className="form-group">
+              <label htmlFor="pulso">Pulso:</label>
+              <input type="file" id="pulso" name="pulso" accept="image/*" capture="environment" onChange={handleImageChange} required />
+              {renderFileName(imageFiles.pulso)}
+            </div>
           </div>
-          <div className="form-group">
-            <label htmlFor="pulso">Pulso:</label>
-            <input type="file" id="pulso" name="pulso" accept="image/*" capture="environment" onChange={handleImageChange} required />
-            {renderFileName(imageFiles.pulso)}
-          </div>
-        </div>
 
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="sueno">Sueño - Hs:</label>
-            <select id="sueno" name="sueno" value={fields.sueno} onChange={handleChange} required>
-              <option value="">Seleccione...</option>
-              {Array.from({ length: 12 }, (_, i) => i + 1).map(num => (
-                <option key={num} value={num}>{num}</option>
-              ))}
-            </select>
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="sueno">Sueño - Hs:</label>
+              <select id="sueno" name="sueno" value={fields.sueno} onChange={handleChange} required>
+                <option value="">Seleccione...</option>
+                {Array.from({ length: 12 }, (_, i) => i + 1).map(num => (
+                  <option key={num} value={num}>{num}</option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="tos">Tos:</label>
+              <select id="tos" name="tos" value={fields.tos} onChange={handleChange} required>
+                <option value="">Seleccione...</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+              </select>
+            </div>
           </div>
-          <div className="form-group">
-            <label htmlFor="tos">Tos:</label>
-            <select id="tos" name="tos" value={fields.tos} onChange={handleChange} required>
-              <option value="">Seleccione...</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-            </select>
-          </div>
-        </div>
 
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="deposicion">Deposición:</label>
-            <select id="deposicion" name="deposicion" value={fields.deposicion} onChange={handleChange} required>
-              <option value="">Seleccione...</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <label htmlFor="orina">Orina Normal:</label>
-            <select id="orina" name="orina" value={fields.orina} onChange={handleChange} required>
-              <option value="">Seleccione...</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-            </select>
-          </div>
-        </div> <br />
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="deposicion">Deposición:</label>
+              <select id="deposicion" name="deposicion" value={fields.deposicion} onChange={handleChange} required>
+                <option value="">Seleccione...</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="orina">Orina Normal:</label>
+              <select id="orina" name="orina" value={fields.orina} onChange={handleChange} required>
+                <option value="">Seleccione...</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+              </select>
+            </div>
+          </div> <br />
 
-        <button type="submit">Enviar</button>
-      </form>
+          <button type="submit">Enviar</button>
+        </form>
+      )}
     </div>
   );
 };

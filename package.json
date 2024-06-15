@@ -23,6 +23,7 @@
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
     "react-spinners": "^0.13.8",
+    "react-to-pdf": "^1.0.1",
     "web-vitals": "^2.1.4",
     "xss-filters": "^1.2.7"
   },
